@@ -29,7 +29,7 @@ def predict_image(request):
             file_path = os.path.join(settings.MEDIA_ROOT, filename)
 
             # Load the model
-            Cnn_model = load(r'G:\412-project\Project\savedModels\Cnn_model.joblib')
+            Cnn_model = load(r'G:\412-project-main\Project\savedModels\Cnn_model.joblib')
 
             # Preprocess the image
             img = keras.preprocessing.image.load_img(file_path, target_size=(150, 150))
