@@ -1,5 +1,4 @@
-from django.shortcuts import render, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse,redirect
 from django.views import View
 from django.http import HttpResponse, JsonResponse
 from django.core.files.storage import FileSystemStorage
@@ -14,6 +13,9 @@ from django.conf import settings
 from tensorflow import keras
 from joblib import load
 import os
+from .forms import ContactForm
+from django.contrib import messages
+
 
 
 def index(request):
@@ -50,3 +52,19 @@ def predict_image(request):
         form = ImageUploadForm()
 
     return render(request, 'predict_image.html', {'form': form})
+
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print("Form data saved:", form.cleaned_data)  # Add this line for debugging
+            messages.success(request, 'Your message has been sent. Thank you!')
+            return redirect('index')
+        else:
+            print("Form errors:", form.errors)  # Add this line for debugging
+    else:
+        form = ContactForm()
+    return render(request, 'index.html', {'form': form})
+
