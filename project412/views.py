@@ -18,6 +18,7 @@ from django.contrib import messages
 from project412.models import Contact
 from datetime import datetime
 from django.db import migrations
+from .forms import RegistrationForm
 
 def index(request):
     if request.method == 'POST':
@@ -65,3 +66,14 @@ def predict_image(request):
 
 def devs(request):
     return render(request,'devs.html')
+
+def registration_signup(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('signup')  # Redirect to a success page
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'signup.html', {'form': form})
