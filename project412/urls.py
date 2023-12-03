@@ -4,8 +4,6 @@ from project412 import views
 
 urlpatterns = [
   
-  path("",views.index, name="index"),
-  path("predict_image/", views.predict_image, name='predict_image'),
-    
-    # Add other paths as needed for your app
+ path("",views.index, name="index"),
+ path('predict_image/', views.predict_image, name='predict_image'),
 ]

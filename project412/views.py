@@ -15,11 +15,20 @@ from joblib import load
 import os
 from .forms import ContactForm
 from django.contrib import messages
-
-
+from project412.models import Contact
+from datetime import datetime
+from django.db import migrations
 
 def index(request):
-    return render(request,'index.html')
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')  # Updated to use the URL name
+    else:
+        form = ContactForm()
+
+    return render(request, 'index.html', {'form': form})
 
 def predict_image(request):
     if request.method == 'POST':
@@ -54,17 +63,5 @@ def predict_image(request):
     return render(request, 'predict_image.html', {'form': form})
 
 
-def contact_view(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            print("Form data saved:", form.cleaned_data)  # Add this line for debugging
-            messages.success(request, 'Your message has been sent. Thank you!')
-            return redirect('index')
-        else:
-            print("Form errors:", form.errors)  # Add this line for debugging
-    else:
-        form = ContactForm()
-    return render(request, 'index.html', {'form': form})
-
+def devs(request):
+    return render(request,'devs.html')
