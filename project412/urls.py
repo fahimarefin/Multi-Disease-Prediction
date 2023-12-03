@@ -6,4 +6,7 @@ urlpatterns = [
   
  path("",views.index, name="index"),
  path('predict_image/', views.predict_image, name='predict_image'),
+ path('signup/',views.registration_signup,name='signup')
+
+
 ]
