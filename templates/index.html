@@ -845,34 +845,42 @@
             </div>
 
           </div>
+          <div style="width: 100%; max-width: 800px; margin: auto; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 20px;">
 
-          <div class="col-lg-8 mt-5 mt-lg-0">
-
-            <form action="{% url 'index' %}" method="post" role="form" class="php-email-form">
-              {% csrf_token %}
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+            <form method="post" action="{% url 'index' %}" style="margin-top: 0px; margin-bottom: 0;">
+        
+                {% csrf_token %}
+        
+                <div style="display: flex; flex-wrap: wrap;">
+        
+                    <div style="flex: 0 0 100%; max-width: 100%; margin-bottom: 1rem;">
+                        <label for="name" style="display: block;">First Name</label>
+                        <input type="text" name="name" placeholder="Name" style="width: 100%; padding: 0.5rem; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);">
+                    </div>
+        
+                    <div style="flex: 0 0 100%; max-width: 100%; margin-bottom: 1rem;">
+                        <label for="phone" style="display: block;">Phone Number</label>
+                        <input type="tel" name="phone" placeholder="Phone" style="width: 100%; padding: 0.5rem; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);">
+                    </div>
+        
+                    <div style="flex: 0 0 100%; max-width: 100%; margin-bottom: 1rem;">
+                        <label for="email" style="display: block;">Email</label>
+                        <input type="email" name="email" placeholder="Email" style="width: 100%; padding: 0.5rem; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);">
+                    </div>
+        
+                    <div style="flex: 0 0 100%; max-width: 100%; margin-bottom: 1rem;">
+                        <label for="description" style="display: block;">Tell me about what you want to contact us for...</label>
+                        <textarea name="description" placeholder="Description" style="width: 100%; padding: 0.5rem; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);"></textarea>
+                    </div>
+        
+                    <div style="flex: 0 0 100%; max-width: 100%; margin-bottom: 1rem;">
+                        <input type="submit" value="Submit" style="background-color: #4CAF50; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; border-radius: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);">
+                    </div>
+        
                 </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                </div>
-              </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-              </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
             </form>
-
-          </div>
+        </div>
+        
 
         </div>
 
