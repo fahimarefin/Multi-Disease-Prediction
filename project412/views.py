@@ -91,20 +91,31 @@ def log_in(request):
         return render(request, "login.html", {"name": "UserProfile"})
 
     elif request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
+        email = request.POST.get("email")
+        password = request.POST.get("password")
 
         print("Email:", email)
         print("Password:", password)
 
-        user = authenticate(request, username=email, password=password)
+        try:
+            user = UserProfile.objects.get(email=email)
+        except UserProfile.DoesNotExist:
+            print("User does not exist")
+            return render(request, "login.html", {"name": "UserProfile", "prompt": "User does not exist!"})
 
-        if user is not None and user.is_active:
+        # Check if the user is active
+        if not user.is_active:
+            print("User is not active")
+            return render(request, "login.html", {"name": "UserProfile", "prompt": "User account is not active!"})
 
+        # Use Django's authenticate function
+        authenticated_user = authenticate(request, username=email, password=password)
+
+        if authenticated_user is not None:
             print("Authentication successful")
-            login(request, user)
+            login(request, authenticated_user)
 
-            if user.is_staff:
+            if authenticated_user.is_staff:
                 # Redirect to admin dashboard or whatever is appropriate for staff members
                 return redirect(reverse('admin:index'))
             else:
@@ -113,7 +124,7 @@ def log_in(request):
                 return redirect(reverse('user_profile'))
         else:
             print("Authentication failed")
-            return render(request, "login.html", {"name": "UserProfile", "prompt": "Sorry UserName or Password is invalid !"})
+            return render(request, "login.html", {"name": "UserProfile", "prompt": "Sorry, email or password is invalid!"})
 
 
 def user_profile(request):
