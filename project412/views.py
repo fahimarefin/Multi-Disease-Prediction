@@ -21,6 +21,9 @@ from django.db import migrations
 from .forms import RegistrationForm
 from django.contrib.auth import authenticate,login
 from django.urls import reverse
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from project412.models import UserProfile
 
 def index(request):
     if request.method == 'POST':
@@ -81,23 +84,48 @@ def registration_signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
+
+
 def log_in(request):
     if request.method == "GET":
         return render(request, "login.html", {"name": "UserProfile"})
 
     elif request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
-        
+        email = request.POST.get("email")
+        password = request.POST.get("password")
 
-        user = authenticate(email= email,password = password)
+        print("Email:", email)
+        print("Password:", password)
 
-        if user is not None:
-            login(request,user)
-            if user.is_staff==True:
+        try:
+            user = UserProfile.objects.get(email=email)
+        except UserProfile.DoesNotExist:
+            print("User does not exist")
+            return render(request, "login.html", {"name": "UserProfile", "prompt": "User does not exist!"})
+
+        # Check if the user is active
+        if not user.is_active:
+            print("User is not active")
+            return render(request, "login.html", {"name": "UserProfile", "prompt": "User account is not active!"})
+
+        # Use Django's authenticate function
+        authenticated_user = authenticate(request, username=email, password=password)
+
+        if authenticated_user is not None:
+            print("Authentication successful")
+            login(request, authenticated_user)
+
+            if authenticated_user.is_staff:
+                # Redirect to admin dashboard or whatever is appropriate for staff members
                 return redirect(reverse('admin:index'))
-                #return render(request, "/loc_admin")
-            elif user.is_staff==False:
-                return render(request, "index.html")
+            else:
+                # Redirect to the user profile page for regular users
+                print("Redirecting to user_profile")
+                return redirect(reverse('user_profile'))
         else:
-            return render(request, "login.html", {"name": "UserProfile","prompt":"Sorry UserName or Password is invalid !"})
+            print("Authentication failed")
+            return render(request, "login.html", {"name": "UserProfile", "prompt": "Sorry, email or password is invalid!"})
+
+
+def user_profile(request):
+    return render(request,'user_profile.html')

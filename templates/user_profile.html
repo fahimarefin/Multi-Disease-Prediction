@@ -1,0 +1,27 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>Welcome to Your User Profile</h1>
+
+    <div>
+        <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" width="100">
+        <p>Name: {{ user_profile.fname }} {{ user_profile.lname }}</p>
+        <p>Email: {{ user_profile.email }}</p>
+        <p>Date of Birth: {{ user_profile.dob }}</p>
+        <p>Gender: {{ user_profile.gender }}</p>
+        <p>Mobile: {{ user_profile.mobile }}</p>
+    </div>
+
+    <!-- Add more details as needed -->
+
+    <a href="{% url 'logout' %}">Logout</a> <!-- Assuming you have a logout URL named 'logout' -->
+
+    <!-- Add any other content or styling as needed -->
+</body>
+</html>
