@@ -19,6 +19,8 @@ from project412.models import Contact
 from datetime import datetime
 from django.db import migrations
 from .forms import RegistrationForm
+from django.contrib.auth import authenticate,login
+from django.urls import reverse
 
 def index(request):
     if request.method == 'POST':
@@ -77,3 +79,25 @@ def registration_signup(request):
         form = RegistrationForm()
 
     return render(request, 'signup.html', {'form': form})
+
+
+def log_in(request):
+    if request.method == "GET":
+        return render(request, "login.html", {"name": "UserProfile"})
+
+    elif request.method == "POST":
+        email = request.POST["email"]
+        password = request.POST["password"]
+        
+
+        user = authenticate(email= email,password = password)
+
+        if user is not None:
+            login(request,user)
+            if user.is_staff==True:
+                return redirect(reverse('admin:index'))
+                #return render(request, "/loc_admin")
+            elif user.is_staff==False:
+                return render(request, "index.html")
+        else:
+            return render(request, "login.html", {"name": "UserProfile","prompt":"Sorry UserName or Password is invalid !"})
