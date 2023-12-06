@@ -24,13 +24,15 @@ from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from project412.models import UserProfile
+from django.contrib.auth.models import User
+
 
 def index(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')  # Updated to use the URL name
+            return redirect('index')
     else:
         form = ContactForm()
 
@@ -71,7 +73,7 @@ def predict_image(request):
 
 def devs(request):
     return render(request,'devs.html')
-
+"""
 def registration_signup(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
@@ -82,50 +84,90 @@ def registration_signup(request):
         form = RegistrationForm()
 
     return render(request, 'signup.html', {'form': form})
+"""
+def signup(request):
+    if request.method=="GET":
+        return render(request,'signup.html')
+    
+    elif request.method=='POST':
+        fname=request.POST.get('fname')
+        lname=request.POST.get('lname')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        dob = request.POST.get('dob')
+        gender = request.POST.get('gender')
+        mobile=request.POST.get('mobile')
+        profile_picture = request.FILES.get('profile_picture')
+
+        myuser= UserProfile(
+            fname=fname,
+            lname=lname,
+            password=password,
+            email=email,
+            dob=dob,
+            gender=gender,
+            mobile=mobile,
+            profile_picture=profile_picture
 
 
+        )
+        print("email:",email)
+        if not (fname and lname and email and password and dob and gender and mobile and profile_picture):
+            return render(request, 'signup.html', {'Prompt': 'Please fill in all the required fields'})
+
+        if UserProfile.objects.filter(email=email).exists():
+            return render(request,'signup.html',{'Prompt':'Email Already Exist'})
+        
+        else:
+            myuser = User.objects.create_user(username=email,first_name=fname,last_name=lname,password=password,email=email)
+
+            myuser.save()
+            ins=UserProfile(fname=fname,lname=lname,email=email,password=password,
+                                         dob=dob,gender=gender,mobile=mobile, profile_picture=profile_picture)
+            ins.save()
+
+            user=authenticate(email=email,password=password)
+
+            if user is not None:
+                login(request,user)
+                return redirect("index")
+            
+            else:
+                return render(request,'signup.html')
 
 
 def log_in(request):
     if request.method == "GET":
         return render(request, "login.html", {"name": "UserProfile"})
-
+    
     elif request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
+        email = request.POST["email"]
+        password = request.POST["password"]
 
         print("Email:", email)
         print("Password:", password)
+        user = authenticate(username=email, password=password)
 
-        try:
-            user = UserProfile.objects.get(email=email)
-        except UserProfile.DoesNotExist:
-            print("User does not exist")
-            return render(request, "login.html", {"name": "UserProfile", "prompt": "User does not exist!"})
+        print(user)
 
-        # Check if the user is active
-        if not user.is_active:
-            print("User is not active")
-            return render(request, "login.html", {"name": "UserProfile", "prompt": "User account is not active!"})
-
-        # Use Django's authenticate function
-        authenticated_user = authenticate(request, username=email, password=password)
-
-        if authenticated_user is not None:
-            print("Authentication successful")
-            login(request, authenticated_user)
-
-            if authenticated_user.is_staff:
-                # Redirect to admin dashboard or whatever is appropriate for staff members
+        if user is not None:
+            login(request,user)
+            if user.is_staff==True:
+                print("username:",email)
+                print("password:",password)
                 return redirect(reverse('admin:index'))
-            else:
-                # Redirect to the user profile page for regular users
-                print("Redirecting to user_profile")
-                return redirect(reverse('user_profile'))
+                #return render(request, "/loc_admin")
+            elif user.is_staff==False:
+                return render(request, "user_profile.html")
         else:
-            print("Authentication failed")
-            return render(request, "login.html", {"name": "UserProfile", "prompt": "Sorry, email or password is invalid!"})
+            return render(request, "login.html", {"name": "UserProfile","prompt":"Sorry UserName or Password is invalid !"})
+    
 
+
+    
+        
+
+    
 
 def user_profile(request):
     return render(request,'user_profile.html')
