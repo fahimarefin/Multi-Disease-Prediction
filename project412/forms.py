@@ -13,3 +13,4 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['fname', 'lname', 'email', 'password', 'dob', 'gender', 'mobile', 'profile_picture']
+     
