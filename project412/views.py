@@ -25,7 +25,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from project412.models import UserProfile
 from django.contrib.auth.models import User
-
+from Project import settings
+from django.core.mail import send_mail
 
 def index(request):
     if request.method == 'POST':
@@ -85,6 +86,9 @@ def registration_signup(request):
 
     return render(request, 'signup.html', {'form': form})
 """
+from django.views.decorators.csrf import csrf_protect
+
+@csrf_protect
 def signup(request):
     if request.method=="GET":
         return render(request,'signup.html')
@@ -125,7 +129,6 @@ def signup(request):
             ins=UserProfile(fname=fname,lname=lname,email=email,password=password,
                                          dob=dob,gender=gender,mobile=mobile, profile_picture=profile_picture)
             ins.save()
-
             user=authenticate(email=email,password=password)
 
             if user is not None:
