@@ -1,6 +1,70 @@
-<h2>Predict Image</h2>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <input type="file" name="image" accept="image/*" required>
-  <button type="submit">Predict</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predict Image</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 500px;
+      margin-top: 50px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .custom-file-upload {
+      border: 1px solid #ccc;
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+    }
+    .file-name {
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 class="mb-4">Predict Image</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="custom-file mb-3">
+      <input type="file" name="image" id="image" class="custom-file-input" accept="image/*" required>
+      <label class="custom-file-upload" for="image">Choose File</label>
+    </div>
+    <div class="file-name" id="file-name"></div>
+    <button type="submit" class="btn btn-primary mt-3">Predict</button>
+  </form>
+</div>
+
+<!-- Include Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  // Display selected file name
+  document.getElementById('image').addEventListener('change', function() {
+    var fileName = this.value.split('\\').pop();
+    document.getElementById('file-name').innerText = 'Selected File: ' + fileName;
+  });
+</script>
+
+</body>
+</html>
