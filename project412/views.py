@@ -48,21 +48,20 @@ def predict_image(request):
             filename = fs.save(uploaded_file.name, uploaded_file)
             file_path = os.path.join(settings.MEDIA_ROOT, filename)
 
-            # Load the model
             Cnn_model = load(r'G:\412-project-main\Project\savedModels\Cnn_model.joblib')
 
-            # Preprocess the image
+            
             img = keras.preprocessing.image.load_img(file_path, target_size=(150, 150))
             img_array = keras.preprocessing.image.img_to_array(img)
-            img_array = tf.expand_dims(img_array, 0)  # Create a batch
+            img_array = tf.expand_dims(img_array, 0)  
 
-            # Make predictions
+            
             predictions = Cnn_model.predict(img_array)
             class_index = tf.argmax(predictions[0]).numpy()
             class_labels = ['Cyst', 'Normal', 'Stone', 'Tumor']
             predicted_class = class_labels[class_index]
 
-            # Delete the uploaded file
+           
             os.remove(file_path)
 
             return render(request, 'predict_result.html', {'predicted_class': predicted_class})
@@ -159,7 +158,7 @@ def log_in(request):
                 print("username:",email)
                 print("password:",password)
                 return redirect(reverse('admin:index'))
-                #return render(request, "/loc_admin")
+                
             elif user.is_staff==False:
                 return render(request, "user_profile.html")
         else:
@@ -167,10 +166,28 @@ def log_in(request):
     
 
 
-    
-        
-
-    
-
 def user_profile(request):
     return render(request,'user_profile.html')
+
+model_diabetics=load(r'C:\Users\Fahim Arefin\Desktop\412_git_ani2\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
+
+def diabetes_prediction(request):
+    if request.method == 'POST':
+        age = request.POST.get('age')
+        hypertension = 1 if request.POST.get('hypertension') == 'yes' else 0
+        heart_disease = 1 if request.POST.get('heart_disease') == 'yes' else 0
+        bmi = request.POST.get('bmi')
+        hba1c = request.POST.get('hba1c')
+        blood_glucose = request.POST.get('bloodGlucose')
+
+       
+        prediction_input = model_diabetics(age=age, hypertension=hypertension, heart_disease=heart_disease, bmi=bmi, hba1c=hba1c, blood_glucose=blood_glucose)
+
+        
+        prediction_result = model_diabetics.predict(prediction_input)
+
+      
+
+        return render(request, 'result_template.html', {'prediction_result': prediction_result})
+
+    return HttpResponse('Method Not Allowed')
