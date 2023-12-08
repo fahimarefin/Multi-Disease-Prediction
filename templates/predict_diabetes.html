@@ -1,3 +1,4 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +38,8 @@
   <div class="container">
     <h2 class="mb-4 text-primary">Diabetes Prediction</h2>
 
-    <form action="#" method="post" id="healthForm">
+    <form action="{% url 'predict_diabetes' %}" method="post" id="healthForm">
+      {% csrf_token %}
         <div class="form-group">
             <label for="age">Age:</label>
             <input type="number" class="form-control" id="age" name="age" required>
@@ -81,9 +83,9 @@
         <div class="form-group">
             <label for="gender">Select Gender:</label>
             <select class="form-control" id="gender" name="gender">
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="other">Other</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
             </select>
         </div>
 
@@ -91,15 +93,16 @@
             <label for="smoking_history">Smoking History:</label>
             <select class="form-control" id="smoking_history" name="smoking_history">
                 <option value="never">Never</option>
-                <option value="no-info">No Info</option>
+                <option value="No Info">No Info</option>
                 <option value="current">Current</option>
                 <option value="former">Former</option>
                 <option value="ever">Ever</option>
-                <option value="not-current">Not Current</option>
+                <option value="not current">Not Current</option>
             </select>
         </div>
+<!-- Change the button type from "button" to "submit" and add the ID "submitBtn" -->
+<button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
 
-        <button type="button" class="btn btn-primary">Submit</button>
     </form>
   </div>
 
@@ -107,19 +110,23 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#submitBtn').click(function () {
-        
-            if ($('form')[0].checkValidity()) {
-                
-                $('#healthForm').submit();
-            } else {
-                
-                alert('Please fill in all fields.');
-            }
-        });
+  $(document).ready(function () {
+    $('#healthForm').submit(function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        // Check form validity
+        if (this.checkValidity()) {
+            // Submit the form
+            this.submit();
+        } else {
+            // Display an alert if the form is not valid
+            alert('Please fill in all fields.');
+        }
     });
+});
 </script>
+
 
 </body>
 </html>

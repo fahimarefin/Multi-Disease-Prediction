@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diabetes Prediction Result</title>
+</head>
+<body>
+    <h1>Diabetes Prediction Result</h1>
+    {% if prediction_result == 1 %}
+        <h2>The patient has Diabetes.</h2>
+    {% elif prediction_result == 0 %}
+        <h2>The patient does not have diabetes.</h2>
+    {% else %}
+        <h2>Invalid prediction result.</h2>
+    {% endif %}
+</body>
+</html>
