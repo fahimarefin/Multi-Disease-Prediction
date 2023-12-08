@@ -27,6 +27,8 @@ from project412.models import UserProfile
 from django.contrib.auth.models import User
 from Project import settings
 from django.core.mail import send_mail
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 
 def index(request):
     if request.method == 'POST':
@@ -172,22 +174,45 @@ def user_profile(request):
 model_diabetics=load(r'C:\Users\Fahim Arefin\Desktop\412_git_ani2\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
 
 def diabetes_prediction(request):
-    if request.method == 'POST':
-        age = request.POST.get('age')
+    if request.method=="GET":
+        return render(request,'predict_diabetes.html')
+    elif request.method=='POST':
+        age = float(request.POST.get('age'))
+        
         hypertension = 1 if request.POST.get('hypertension') == 'yes' else 0
         heart_disease = 1 if request.POST.get('heart_disease') == 'yes' else 0
-        bmi = request.POST.get('bmi')
-        hba1c = request.POST.get('hba1c')
-        blood_glucose = request.POST.get('bloodGlucose')
+        bmi = float(request.POST.get('bmi'))
+        hba1c = float(request.POST.get('hba1c'))
+        blood_glucose = float(request.POST.get('bloodGlucose'))
+        gender=request.POST.get('gender')
+        smoking_history=request.POST.get('smoking_history')
+     
 
-       
-        prediction_input = model_diabetics(age=age, hypertension=hypertension, heart_disease=heart_disease, bmi=bmi, hba1c=hba1c, blood_glucose=blood_glucose)
+        df = pd.read_csv(r'C:\Users\Fahim Arefin\Desktop\412_git_ani2\Multi-Disease-Prediction\notebooks\diabetes_prediction_dataset.csv')
+        smoking_le = LabelEncoder()
+        smoking_le.fit( df["smoking_history"] )
+
+        gender_le = LabelEncoder()
+        gender_le.fit( df["gender"] )
 
         
-        prediction_result = model_diabetics.predict(prediction_input)
+        gender = gender_le.transform([gender])[0]
+        smoking_history = smoking_le.transform([smoking_history])[0]
 
+        print("Data types:", type(age), type(bmi), type(hba1c), type(blood_glucose), type(gender), type(smoking_history))
+        print("Feature values:", age, bmi, hba1c, blood_glucose, gender, smoking_history)
+
+     
+        print(age,hypertension,heart_disease,bmi,hba1c,blood_glucose,gender,smoking_history)
+
+       
+        #prediction_input = model_diabetics(age=age, hypertension=hypertension, heart_disease=heart_disease, bmi=bmi, hba1c=hba1c, blood_glucose=blood_glucose)
+
+        
+        prediction_result = model_diabetics.predict([[age,hypertension,heart_disease,bmi,hba1c,blood_glucose,gender,smoking_history]])
+        print("Prediction is :", prediction_result)
       
 
-        return render(request, 'result_template.html', {'prediction_result': prediction_result})
+        return render(request, 'predict_diabetes_result.html', {'prediction_result': prediction_result})
 
     return HttpResponse('Method Not Allowed')
