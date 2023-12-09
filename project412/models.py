@@ -4,14 +4,14 @@ from datetime import datetime
 class Contact(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=122)
-    email = models.CharField(max_length=122)
+    email = models.EmailField(max_length=122)
     phone = models.CharField(max_length=12)
     description = models.TextField()
     date = models.DateField(default=datetime.now)  
 
     def __str__(self):
         return self.name
-    
+
 class UserProfile(models.Model):
     fname = models.CharField(max_length=100)
     lname = models.CharField(max_length=100)
