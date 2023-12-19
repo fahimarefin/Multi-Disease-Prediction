@@ -1,4 +1,5 @@
-{%load static%}
+<!-- profile.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,21 +8,23 @@
     <title>User Profile</title>
 </head>
 <body>
-    <h1>Welcome to Your User Profile</h1>
+    <h1>Welcome to Your Profile</h1>
+    {% csrf_token %}
 
     <div>
-        <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" width="100">
-        <p>Name: {{ user_profile.fname }} {{ user_profile.lname }}</p>
-        <p>Email: {{ user_profile.email }}</p>
-        <p>Date of Birth: {{ user_profile.dob }}</p>
-        <p>Gender: {{ user_profile.gender }}</p>
-        <p>Mobile: {{ user_profile.mobile }}</p>
+        <strong>First Name:</strong> {{ user.first_name }}<br>
+        <strong>Last Name:</strong> {{ user.last_name }}<br>
+        <strong>Email:</strong> {{ user.email }}<br>
+        <strong>Date of Birth:</strong> {{ user.dob }}<br>
+        <strong>Gender:</strong> {{ user.gender }}<br>
+        <strong>Mobile:</strong> {{ user.mobile }}<br>
+
+        {% if user.userprofile.profile_picture %}
+            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+        {% endif %}
     </div>
 
-    <!-- Add more details as needed -->
-
-    <!-- Assuming you have a logout URL named 'logout' -->
-
-    <!-- Add any other content or styling as needed -->
+    <br>
+    <a href="{% url 'index' %}">Logout</a>
 </body>
 </html>

@@ -167,9 +167,13 @@ def log_in(request):
             return render(request, "login.html", {"name": "UserProfile","prompt":"Sorry UserName or Password is invalid !"})
     
 
-
+@login_required
 def user_profile(request):
-    return render(request,'user_profile.html')
+    UserProfile=UserProfile.objects.get(username=request.user.email)
+    context={
+        'UserProfile':UserProfile
+   }
+    return render(request,'user_profile.html',context)
 
 model_diabetics=load(r'C:\Users\Fahim Arefin\Desktop\412_git_ani2\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
 
