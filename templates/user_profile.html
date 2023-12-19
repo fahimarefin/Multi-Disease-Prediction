@@ -1,30 +1,74 @@
-<!-- profile.html -->
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
-<body>
-    <h1>Welcome to Your Profile</h1>
-    {% csrf_token %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/ani.png' %}" alt="Company Logo" class="logo-image rounded-circle" style="max-height: 40px;">
+        Multi Disease Prediction
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>      
+          </li>
+          <a class="nav-link" href="{% url 'predict_image' %}">Kidney Disease Prediction</a>
+          <li>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'predict_diabetes' %}">Diabetese Disease Prediction</a>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="jumbotron">
+            
+            {% csrf_token %}
 
-    <div>
-        <strong>First Name:</strong> {{ user.first_name }}<br>
-        <strong>Last Name:</strong> {{ user.last_name }}<br>
-        <strong>Email:</strong> {{ user.email }}<br>
-        <strong>Date of Birth:</strong> {{ user.dob }}<br>
-        <strong>Gender:</strong> {{ user.gender }}<br>
-        <strong>Mobile:</strong> {{ user.mobile }}<br>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Profile Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-3">First Name:</dt>
+                        <dd class="col-sm-9">{{ user.first_name }}</dd>
 
-        {% if user.userprofile.profile_picture %}
-            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
-        {% endif %}
+                        <dt class="col-sm-3">Last Name:</dt>
+                        <dd class="col-sm-9">{{ user.last_name }}</dd>
+
+                        <dt class="col-sm-3">Email:</dt>
+                        <dd class="col-sm-9">{{ user.email }}</dd>
+                    </dl>
+
+                    {% if user.userprofile.profile_picture %}
+                        <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'index' %}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
     </div>
 
-    <br>
-    <a href="{% url 'index' %}">Logout</a>
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
