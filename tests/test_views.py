@@ -39,12 +39,12 @@ class DiabetesPredictionTests(TestCase):
             'smoking_history': 'never'
         }
 
-        # Simulate an invalid post that triggers the 'male' ValueError
+        
         with self.assertRaises(ValueError):
             response = self.client.post(reverse('project412:diabetes_prediction'), data)
 
-        # Additional assertion for invalid post
+        
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'predict_diabetes.html')
-        # Ensure that 'Prompt' is not present in the context for invalid posts
+       
         self.assertNotIn('Prompt', response.context)
