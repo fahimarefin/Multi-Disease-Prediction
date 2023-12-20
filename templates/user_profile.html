@@ -1,27 +1,80 @@
-{%load static%}
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-</head>
-<body>
-    <h1>Welcome to Your User Profile</h1>
 
-    <div>
-        <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" width="100">
-        <p>Name: {{ user_profile.fname }} {{ user_profile.lname }}</p>
-        <p>Email: {{ user_profile.email }}</p>
-        <p>Date of Birth: {{ user_profile.dob }}</p>
-        <p>Gender: {{ user_profile.gender }}</p>
-        <p>Mobile: {{ user_profile.mobile }}</p>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 21px;
+        }
+    </style>
+</head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'img/ani.png' %}" alt="Company Logo" class="logo-image rounded-circle" style="max-height: 40px;">
+        Multi Disease Prediction
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>      
+          </li>
+          <a class="nav-link" href="{% url 'predict_image' %}">Kidney Disease Prediction</a>
+          <li>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'predict_diabetes' %}">Diabetese Disease Prediction</a>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="jumbotron">
+            
+            {% csrf_token %}
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Profile Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-3">First Name:</dt>
+                        <dd class="col-sm-9">{{ user.first_name }}</dd>
+
+                        <dt class="col-sm-3">Last Name:</dt>
+                        <dd class="col-sm-9">{{ user.last_name }}</dd>
+
+                        <dt class="col-sm-3">Email:</dt>
+                        <dd class="col-sm-9">{{ user.email }}</dd>
+                    </dl>
+
+                    {% if user.userprofile.profile_picture %}
+                        <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'index' %}" class="btn btn-primary">Logout</a>
+            </div>
+        </div>
     </div>
 
-    <!-- Add more details as needed -->
-
-    <!-- Assuming you have a logout URL named 'logout' -->
-
-    <!-- Add any other content or styling as needed -->
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
