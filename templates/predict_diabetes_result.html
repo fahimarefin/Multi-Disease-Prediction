@@ -104,6 +104,25 @@
         </div>
       </div>
     </nav>
+    <div class="card mt-4">
+      <div class="card-body">
+          <h5 class="card-title">Profile Information</h5>
+          <dl class="row">
+              <dt class="col-sm-3">First Name:</dt>
+              <dd class="col-sm-9">{{ user.first_name }}</dd>
+
+              <dt class="col-sm-3">Last Name:</dt>
+              <dd class="col-sm-9">{{ user.last_name }}</dd>
+
+              <dt class="col-sm-3">Email:</dt>
+              <dd class="col-sm-9">{{ user.email }}</dd>
+          </dl>
+
+          {% if user.userprofile.profile_picture %}
+              <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture" class="img-fluid">
+          {% endif %}
+      </div>
+  </div>
 
     <br>
 <br>

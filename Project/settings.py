@@ -142,3 +142,5 @@ INTERNAL_IPS=[
   'localhost',
   '127.0.0.1',
 ]
+# settings.py
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'

@@ -40,7 +40,7 @@ def index(request):
         form = ContactForm()
 
     return render(request, 'index.html', {'form': form})
-
+@login_required
 def predict_image(request):
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
@@ -176,7 +176,7 @@ def user_profile(request):
     return render(request,'user_profile.html',context)
 
 model_diabetics=load(r'G:\412_Project_Fahim\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
-
+@login_required
 def diabetes_prediction(request):
     if request.method=="GET":
         return render(request,'predict_diabetes.html')
