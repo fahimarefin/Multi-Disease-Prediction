@@ -50,7 +50,7 @@ def predict_image(request):
             filename = fs.save(uploaded_file.name, uploaded_file)
             file_path = os.path.join(settings.MEDIA_ROOT, filename)
 
-            Cnn_model = load(r'G:\412_Project_Fahim\Multi-Disease-Prediction\savedModels\Cnn_model.joblib')
+            Cnn_model = load(r'C:\Users\Fahim Arefin\Desktop\412_Project_Fahim\Multi-Disease-Prediction\savedModels\Cnn_model.joblib')
 
             
             img = keras.preprocessing.image.load_img(file_path, target_size=(150, 150))
@@ -175,7 +175,7 @@ def user_profile(request):
    }
     return render(request,'user_profile.html',context)
 
-model_diabetics=load(r'G:\412_Project_Fahim\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
+model_diabetics=load(r'C:\Users\Fahim Arefin\Desktop\412_Project_Fahim\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
 @login_required
 def diabetes_prediction(request):
     if request.method=="GET":
@@ -192,7 +192,7 @@ def diabetes_prediction(request):
         smoking_history=request.POST.get('smoking_history')
      
 
-        df = pd.read_csv(r'G:\412_Project_Fahim\Multi-Disease-Prediction\notebooks\diabetes_prediction_dataset.csv')
+        df = pd.read_csv(r'C:\Users\Fahim Arefin\Desktop\412_Project_Fahim\Multi-Disease-Prediction\notebooks\diabetes_prediction_dataset.csv')
         smoking_le = LabelEncoder()
         smoking_le.fit( df["smoking_history"] )
 
