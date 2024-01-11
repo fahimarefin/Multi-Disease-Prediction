@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
+
 
 class Contact(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -13,6 +15,7 @@ class Contact(models.Model):
         return self.name
 
 class UserProfile(models.Model):
+    user = models.OneToOneField(User, null=True,on_delete=models.CASCADE)
     fname = models.CharField(max_length=100)
     lname = models.CharField(max_length=100)
     email = models.EmailField(primary_key=True)

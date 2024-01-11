@@ -89,55 +89,56 @@ def registration_signup(request):
 """
 from django.views.decorators.csrf import csrf_protect
 
+from django.contrib.auth import authenticate, login
+
 @csrf_protect
 def signup(request):
-    if request.method=="GET":
-        return render(request,'signup.html')
+    if request.method == "GET":
+        return render(request, 'signup.html')
     
-    elif request.method=='POST':
-        fname=request.POST.get('fname')
-        lname=request.POST.get('lname')
+    elif request.method == 'POST':
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
         email = request.POST.get('email')
         password = request.POST.get('password')
         dob = request.POST.get('dob')
         gender = request.POST.get('gender')
-        mobile=request.POST.get('mobile')
+        mobile = request.POST.get('mobile')
         profile_picture = request.FILES.get('profile_picture')
 
-        myuser= UserProfile(
-            fname=fname,
-            lname=lname,
-            password=password,
-            email=email,
-            dob=dob,
-            gender=gender,
-            mobile=mobile,
-            profile_picture=profile_picture
-
-
-        )
-        print("email:",email)
+        print("email:", email)
         if not (fname and lname and email and password and dob and gender and mobile and profile_picture):
             return render(request, 'signup.html', {'Prompt': 'Please fill in all the required fields'})
 
         if UserProfile.objects.filter(email=email).exists():
-            return render(request,'signup.html',{'Prompt':'Email Already Exist'})
+            return render(request, 'signup.html', {'Prompt': 'Email Already Exists'})
         
         else:
-            myuser = User.objects.create_user(username=email,first_name=fname,last_name=lname,password=password,email=email)
+            myuser = User.objects.create_user(username=email, first_name=fname, last_name=lname, password=password, email=email)
 
-            myuser.save()
-            ins=UserProfile(fname=fname,lname=lname,email=email,password=password,
-                                         dob=dob,gender=gender,mobile=mobile, profile_picture=profile_picture)
+            user_profile = UserProfile.objects.create(user=myuser, profile_picture=profile_picture, dob=dob, gender=gender, mobile=mobile)
+
+            ins = UserProfile(
+                fname=fname,
+                lname=lname,
+                email=email,
+                password=password,
+                dob=dob,
+                gender=gender,
+                mobile=mobile,
+                profile_picture=profile_picture
+            )
             ins.save()
-            user=authenticate(email=email,password=password)
+
+            user = authenticate(username=email, password=password)
 
             if user is not None:
-                login(request,user)
+                login(request, user)
                 return redirect("index")
             
             else:
-                return render(request,'signup.html')
+                return render(request, 'signup.html')
+
 
 
 def log_in(request):
@@ -166,14 +167,17 @@ def log_in(request):
         else:
             return render(request, "login.html", {"name": "UserProfile","prompt":"Sorry UserName or Password is invalid !"})
     
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 @login_required
 def user_profile(request):
-    UserProfile=UserProfile.objects.get(username=request.user.email)
-    context={
-        'UserProfile':UserProfile
-   }
-    return render(request,'user_profile.html',context)
+    user_profile = request.user.userprofile  # Assuming UserProfile is related to User through OneToOneField
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'user_profile.html', context)
+
 
 model_diabetics=load(r'C:\Users\Fahim Arefin\Desktop\412_Project_Fahim\Multi-Disease-Prediction\savedModels\ensemble_model_classification_diabates.joblib')
 @login_required

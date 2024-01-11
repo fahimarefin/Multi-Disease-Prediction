@@ -71,7 +71,10 @@
             </div>
         </div>
     </div>
-
+    <h2>User Profile</h2>
+    <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture">
+    <p>Username: {{ user_profile.user.username }}</p>
+    <p>Email: {{ user_profile.user.email }}</p>
     <!-- Include Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
